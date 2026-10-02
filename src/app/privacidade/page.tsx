@@ -58,7 +58,7 @@ export default function Privacidade() {
           armazenados por nós.
         </p>
         <p>
-          Contato do responsável: <strong>[inserir e-mail de contato]</strong>
+          Contato do responsável: <a className="font-bold underline" href="mailto:anselmotech2025@gmail.com">anselmotech2025@gmail.com</a>
         </p>
       </section>
 
