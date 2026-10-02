@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-10">
       <header>
-        <h1 className="text-3xl font-bold text-teal-700">Bulina</h1>
+        <h1 className="text-3xl font-bold text-teal-700">Bulinha</h1>
         <p className="mt-1 text-zinc-600">
           A bula do seu remédio, resumida e em linguagem simples.
         </p>

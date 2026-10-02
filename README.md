@@ -1,4 +1,4 @@
-# Bulina
+# Bulinha
 
 App web (PWA) para consultar remédios: para que serve, como usar, efeitos colaterais e cuidados, como uma bula resumida em linguagem simples. A busca é por nome ou por foto da caixa.
 
@@ -44,8 +44,8 @@ Variáveis de ambiente (no servidor; **nunca** commitar):
 | Variável | Uso |
 |---|---|
 | `ANTHROPIC_API_KEY` | Obrigatória para a foto. Local: `.env.local`. Produção: variáveis do projeto na Vercel. Sem ela, o endpoint responde 503 e a busca por nome continua funcionando. |
-| `BULINA_MODEL` | Opcional. Padrão `claude-opus-5-5`. |
-| `BULINA_LIMITE_DIARIO` | Opcional. Fotos por IP por dia (padrão 20, em memória por instância). |
+| `BULINHA_MODEL` | Opcional. Padrão `claude-opus-5-5`. |
+| `BULINHA_LIMITE_DIARIO` | Opcional. Fotos por IP por dia (padrão 20, em memória por instância). |
 
 ## Próximos passos
 

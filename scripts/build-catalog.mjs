@@ -5,7 +5,7 @@ import { parse } from "csv-parse/sync";
 
 const CATALOG_URL = "https://dados.anvisa.gov.br/dados/DADOS_ABERTOS_MEDICAMENTOS.csv";
 // curl respeita HTTPS_PROXY (o fetch do Node, não).
-const buf = execFileSync("curl", ["-fsSL", "--max-time", "180", "-A", "Mozilla/5.0 (compatible; Bulina/1.0)", CATALOG_URL], {
+const buf = execFileSync("curl", ["-fsSL", "--max-time", "180", "-A", "Mozilla/5.0 (compatible; Bulinha/1.0)", CATALOG_URL], {
   maxBuffer: 64 * 1024 * 1024,
 });
 const text = new TextDecoder("latin1").decode(buf);

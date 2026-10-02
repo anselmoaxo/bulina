@@ -22,7 +22,7 @@ async function reduzir(arquivo: File, ladoMax = 1280): Promise<Blob> {
   );
 }
 
-const CHAVE_CONSENTIMENTO = "bulina:consentimento-foto";
+const CHAVE_CONSENTIMENTO = "bulinha:consentimento-foto";
 
 function jaConsentiu(): boolean {
   try {
@@ -85,7 +85,7 @@ export default function Foto() {
         <div role="dialog" aria-label="Uso da foto" className="space-y-3 rounded-lg border border-teal-200 bg-teal-50 p-4 text-sm text-zinc-800">
           <p>
             Para ler o nome do remédio, a foto é enviada para um serviço de inteligência artificial
-            (Anthropic). A Bulina não guarda a foto. Fotografe só a caixa, sem pessoas, documentos
+            (Anthropic). A Bulinha não guarda a foto. Fotografe só a caixa, sem pessoas, documentos
             ou receitas. Detalhes na{" "}
             <Link href="/privacidade" className="underline">
               política de privacidade

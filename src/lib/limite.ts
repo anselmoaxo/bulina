@@ -1,6 +1,6 @@
 // Limite diário simples por IP, em memória. Em ambiente serverless vale por instância:
 // serve como freio de custo no MVP, não como garantia forte.
-const LIMITE_DIARIO = Number(process.env.BULINA_LIMITE_DIARIO ?? 20);
+const LIMITE_DIARIO = Number(process.env.BULINHA_LIMITE_DIARIO ?? 20);
 const usos = new Map<string, { dia: string; n: number }>();
 
 export function dentroDoLimite(ip: string): boolean {

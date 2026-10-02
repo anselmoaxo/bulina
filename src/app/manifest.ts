@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Bulina - bula resumida",
-    short_name: "Bulina",
+    name: "Bulinha - bula resumida",
+    short_name: "Bulinha",
     description: "Consulte para que serve um remédio e seus efeitos colaterais, em linguagem simples.",
     start_url: "/",
     display: "standalone",

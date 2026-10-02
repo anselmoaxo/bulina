@@ -8,7 +8,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Bulina - bula resumida",
+  title: "Bulinha - bula resumida",
   description: "Consulte para que serve um remédio e seus efeitos colaterais, em linguagem simples.",
 };
 

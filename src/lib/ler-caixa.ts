@@ -25,7 +25,7 @@ export async function lerCaixa(
   tipo: TipoImagem,
 ): Promise<Leitura> {
   const resposta = await client.messages.parse({
-    model: process.env.BULINA_MODEL ?? "claude-opus-5-5",
+    model: process.env.BULINHA_MODEL ?? "claude-opus-5-5",
     max_tokens: 2000,
     output_config: { effort: "low", format: zodOutputFormat(Leitura) },
     messages: [

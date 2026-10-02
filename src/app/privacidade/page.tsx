@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Privacidade - Bulina" };
+export const metadata: Metadata = { title: "Privacidade - Bulinha" };
 
 export default function Privacidade() {
   return (
@@ -15,7 +15,7 @@ export default function Privacidade() {
       <section className="space-y-2">
         <h2 className="text-lg font-semibold">Resumo</h2>
         <p>
-          A Bulina não pede cadastro, e-mail nem senha. Não guardamos o que você pesquisa nem as
+          A Bulinha não pede cadastro, e-mail nem senha. Não guardamos o que você pesquisa nem as
           fotos que você tira.
         </p>
       </section>
@@ -25,7 +25,7 @@ export default function Privacidade() {
         <p>
           Ao fotografar a caixa, a imagem é reduzida no seu aparelho e enviada ao nosso servidor, que
           a repassa à Anthropic (serviço de inteligência artificial) apenas para ler o nome do
-          remédio. A Bulina não grava a foto. A Anthropic trata os dados conforme seus próprios
+          remédio. A Bulinha não grava a foto. A Anthropic trata os dados conforme seus próprios
           termos e política de privacidade. Por isso, fotografe somente a caixa, sem pessoas,
           documentos ou receitas.
         </p>
@@ -65,7 +65,7 @@ export default function Privacidade() {
       <section className="space-y-2">
         <h2 className="text-lg font-semibold">Aviso importante</h2>
         <p>
-          A Bulina é informativa e não substitui a orientação de um médico ou farmacêutico. Não se
+          A Bulinha é informativa e não substitui a orientação de um médico ou farmacêutico. Não se
           automedique. Em emergência, ligue para o SAMU (192).
         </p>
       </section>
