@@ -17,8 +17,8 @@ function CapsulaBalancando() {
   return (
     <svg aria-hidden width="72" height="72" viewBox="0 0 120 120" className="anim-balanco shrink-0">
       <g transform="rotate(-40 60 60)">
-        <rect x="12" y="38" width="96" height="44" rx="22" fill="#0b6b5a" />
-        <path d="M60 38h26a22 22 0 0 1 0 44H60z" fill="#8ef0d4" />
+        <rect x="12" y="38" width="96" height="44" rx="22" fill="#2563eb" />
+        <path d="M60 38h26a22 22 0 0 1 0 44H60z" fill="#93c5fd" />
       </g>
     </svg>
   );
@@ -41,7 +41,7 @@ export default function Aguarde({ titulo, etapas, esqueleto = false }: { titulo:
 
   return (
     <div role="status" aria-live="polite" className="space-y-5">
-      <div className="flex items-center gap-4 rounded-2xl bg-bula p-5">
+      <div className="flex items-center gap-4 rounded-2xl bg-bruma p-5">
         <CapsulaBalancando />
         <div className="min-w-0">
           <p className="text-xl font-extrabold">{titulo}</p>
@@ -49,7 +49,7 @@ export default function Aguarde({ titulo, etapas, esqueleto = false }: { titulo:
         </div>
       </div>
 
-      <p key={dica} className="anim-dica rounded-2xl border-l-8 border-folha bg-white p-5">
+      <p key={dica} className="anim-dica rounded-2xl border-l-8 border-marca bg-white p-5">
         <strong>Você sabia?</strong> {DICAS[dica]}
       </p>
 

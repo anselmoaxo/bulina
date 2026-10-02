@@ -43,8 +43,8 @@ export default function Home() {
   return (
     <main className="flex flex-1 flex-col">
       <section
-        className="relative isolate overflow-hidden bg-noite text-white"
-        style={{ backgroundImage: "radial-gradient(70% 90% at 90% 0%, #0b6b5a 0%, transparent 70%)" }}
+        className="relative isolate overflow-hidden bg-marinho text-white"
+        style={{ backgroundImage: "radial-gradient(70% 90% at 90% 0%, #2563eb 0%, transparent 70%)" }}
       >
         <Pilulas className="pointer-events-none absolute -right-24 top-40 -z-10 w-72 opacity-20 md:right-0 md:top-1/2 md:w-[28rem] md:-translate-y-1/2 md:opacity-100" />
         <div className="mx-auto max-w-5xl px-4 pb-14 pt-6 sm:pb-20">
@@ -67,8 +67,8 @@ export default function Home() {
       <div className="mx-auto w-full max-w-5xl space-y-16 px-4 py-14">
         <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {DIFERENCIAIS.map((d) => (
-            <li key={d.texto} className="flex items-center gap-3 rounded-2xl bg-bula p-4 font-bold">
-              <svg aria-hidden width="26" height="26" viewBox="0 0 24 24" className="shrink-0 text-folha" {...ICONE}>
+            <li key={d.texto} className="flex items-center gap-3 rounded-2xl bg-bruma p-4 font-bold">
+              <svg aria-hidden width="26" height="26" viewBox="0 0 24 24" className="shrink-0 text-marca" {...ICONE}>
                 {d.icone}
               </svg>
               {d.texto}
@@ -80,8 +80,8 @@ export default function Home() {
           <h2 className="text-3xl font-extrabold">Como funciona</h2>
           <ol className="grid gap-4 md:grid-cols-3">
             {PASSOS.map((p, i) => (
-              <li key={p.titulo} className="rounded-3xl bg-white p-6 shadow-[0_8px_30px_-12px_rgba(5,46,39,0.25)]">
-                <span className="flex size-12 items-center justify-center rounded-full bg-folha text-xl font-extrabold text-white">
+              <li key={p.titulo} className="rounded-3xl bg-white p-6 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.25)]">
+                <span className="flex size-12 items-center justify-center rounded-full bg-marca text-xl font-extrabold text-white">
                   {i + 1}
                 </span>
                 <h3 className="mt-4 text-xl font-extrabold">{p.titulo}</h3>
@@ -98,7 +98,7 @@ export default function Home() {
               <details key={q.p} className="group py-4">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-bold">
                   {q.p}
-                  <svg aria-hidden width="22" height="22" viewBox="0 0 24 24" className="shrink-0 text-folha transition-transform group-open:rotate-180" {...ICONE}>
+                  <svg aria-hidden width="22" height="22" viewBox="0 0 24 24" className="shrink-0 text-marca transition-transform group-open:rotate-180" {...ICONE}>
                     <path d="M6 9l6 6 6-6" />
                   </svg>
                 </summary>

@@ -8,7 +8,7 @@ type Estado = { tipo: "carregando" } | { tipo: "erro"; mensagem: string } | { ti
 
 const BULARIO = "https://consultas.anvisa.gov.br/#/bulario/";
 
-const CARTAO = "space-y-2 rounded-2xl bg-white p-5 shadow-[0_6px_24px_-14px_rgba(5,46,39,0.35)] print:break-inside-avoid print:shadow-none print:border print:border-linha";
+const CARTAO = "space-y-2 rounded-2xl bg-white p-5 shadow-[0_6px_24px_-14px_rgba(15,23,42,0.35)] print:break-inside-avoid print:shadow-none print:border print:border-linha";
 
 function salvarPdf(nome: string) {
   const tituloOriginal = document.title;
@@ -22,7 +22,7 @@ function Lista({ titulo, itens, alerta = false }: { titulo: string; itens: strin
   return (
     <section className={`${CARTAO} ${alerta ? "border-l-8 border-tarja print:border-l-tarja" : ""}`}>
       <h3 className="text-xl font-extrabold">{titulo}</h3>
-      <ul className="list-disc space-y-1 pl-6 marker:text-folha">
+      <ul className="list-disc space-y-1 pl-6 marker:text-marca">
         {itens.map((i) => (
           <li key={i}>{i}</li>
         ))}
@@ -113,7 +113,7 @@ export default function ResumoGeral({ principio, nome }: { principio: string; no
       <button
         type="button"
         onClick={() => salvarPdf(nome)}
-        className="flex items-center gap-2 rounded-full bg-folha px-6 py-3 text-lg font-extrabold text-white hover:bg-folha-escura print:hidden"
+        className="flex items-center gap-2 rounded-full bg-marca px-6 py-3 text-lg font-extrabold text-white hover:bg-marca-escura print:hidden"
       >
         <svg aria-hidden width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" />

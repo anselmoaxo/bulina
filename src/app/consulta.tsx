@@ -43,7 +43,7 @@ function Lista({ itens }: { itens: Medicamento[] }) {
     <ul className="border-t border-linha">
       {itens.map((m) => (
         <li key={`${m.nome}|${m.principio}`} className="border-b border-linha">
-          <Link href={linkDetalhe(m)} className="block py-4 hover:bg-bula">
+          <Link href={linkDetalhe(m)} className="block py-4 hover:bg-bruma">
             <span className="block text-lg font-bold leading-snug">{formatarNome(m.nome)}</span>
             <span className="block text-muted">
               {m.principio ? formatarNome(m.principio) : "Princípio ativo não informado"}
@@ -114,7 +114,7 @@ export default function Consulta() {
   return (
     <section className="space-y-4">
       {/* Cápsula: campo de texto à esquerda, foto à direita. */}
-      <div className="flex h-[4.5rem] overflow-hidden rounded-full bg-white text-ink shadow-[0_16px_40px_-10px_rgba(0,0,0,0.55)] focus-within:outline-4 focus-within:outline-offset-4 focus-within:outline-menta">
+      <div className="flex h-[4.5rem] overflow-hidden rounded-full bg-white text-ink shadow-[0_16px_40px_-10px_rgba(0,0,0,0.55)] focus-within:outline-4 focus-within:outline-offset-4 focus-within:outline-claro">
         <label htmlFor="busca" className="sr-only">
           Nome do remédio ou princípio ativo
         </label>
@@ -131,7 +131,7 @@ export default function Consulta() {
           type="button"
           disabled={lendo}
           onClick={() => (jaConsentiu() ? inputFoto.current?.click() : setConsentimento(true))}
-          className="flex shrink-0 items-center gap-2 bg-menta pl-5 pr-7 text-lg font-extrabold text-ink hover:bg-white disabled:opacity-70"
+          className="flex shrink-0 items-center gap-2 bg-marca pl-5 pr-7 text-lg font-extrabold text-white hover:bg-marca-escura disabled:opacity-70"
         >
           <svg aria-hidden width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
@@ -166,7 +166,7 @@ export default function Consulta() {
       )}
 
       {consentimento && (
-        <div role="dialog" aria-label="Uso da foto" className="space-y-4 border-l-8 border-folha bg-bula p-4">
+        <div role="dialog" aria-label="Uso da foto" className="space-y-4 border-l-8 border-marca bg-bruma p-4">
           <p>
             Para ler o nome do remédio, a foto é enviada a um serviço de inteligência artificial
             (Anthropic). O Bulinha não guarda a foto. Fotografe só a caixa, sem pessoas, documentos
@@ -178,7 +178,7 @@ export default function Consulta() {
           <div className="flex flex-wrap gap-3">
             <button
               type="button"
-              className="rounded-full bg-folha px-6 py-3 font-bold text-white hover:bg-folha-escura"
+              className="rounded-full bg-marca px-6 py-3 font-bold text-white hover:bg-marca-escura"
               onClick={() => {
                 try {
                   localStorage.setItem(CHAVE_CONSENTIMENTO, "1");

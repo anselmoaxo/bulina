@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Privacidade - Bulinha" };
 export default function Privacidade() {
   return (
     <main className="mx-auto w-full max-w-xl flex-1 space-y-6 px-4 py-8 ">
-      <Link href="/" className="text-sm font-bold text-folha underline">
+      <Link href="/" className="text-sm font-bold text-marca underline">
         Voltar
       </Link>
       <h1 className="text-4xl leading-tight font-extrabold">Política de privacidade</h1>
