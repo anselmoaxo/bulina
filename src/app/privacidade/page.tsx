@@ -40,6 +40,24 @@ export default function Privacidade() {
       </section>
 
       <section className="space-y-2">
+        <h2 className="text-xl font-extrabold">Meus remédios</h2>
+        <p>
+          A lista de remédios que você monta fica salva apenas no seu aparelho, no navegador. Nós não
+          temos acesso a ela. Para checar interações, enviamos à Anthropic somente os nomes das
+          substâncias dos remédios da lista, sem nenhum dado seu. Se você limpar os dados do navegador,
+          a lista é apagada.
+        </p>
+      </section>
+
+      <section className="space-y-2">
+        <h2 className="text-xl font-extrabold">Ler em voz alta</h2>
+        <p>
+          A leitura em voz alta usa a voz do seu próprio aparelho. O texto não é enviado a nenhum
+          serviço para isso.
+        </p>
+      </section>
+
+      <section className="space-y-2">
         <h2 className="text-xl font-extrabold">Dados técnicos</h2>
         <p>
           Para gerar o resumo de um medicamento, enviamos à Anthropic apenas o nome do princípio ativo, sem nenhum dado seu. Para limitar o número de fotos e resumos por dia, o servidor usa seu endereço IP temporariamente, em

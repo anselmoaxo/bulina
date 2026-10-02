@@ -51,6 +51,11 @@ Variáveis de ambiente (no servidor; **nunca** commitar):
 
 `GET /api/resumo?principio=...` gera, com o Claude, um resumo geral da substância (para que serve, efeitos, contraindicações, cuidados, interações), sem doses. **Não é a bula do produto**; a tela deixa isso explícito e aponta o Bulário da ANVISA. Só aceita princípios ativos que existem no catálogo. O resultado é guardado na CDN da Vercel por 30 dias (`s-maxage`), então cada princípio ativo é gerado poucas vezes. Limite por IP para gerações novas: `BULINHA_LIMITE_RESUMOS` (padrão 40/dia).
 
+## Meus remédios e leitura em voz alta
+
+- **Meus remédios** (`/meus-remedios`): lista de até 10 remédios guardada só no aparelho (`localStorage`), sem login. `GET /api/interacoes?p=...` recebe apenas princípios ativos (validados no catálogo) e gera, com o Claude, possíveis interações e substâncias repetidas; cache de 30 dias na CDN. Duplicidades de princípio ativo idênticas são detectadas no próprio navegador, sem IA. Limite por IP: `BULINHA_LIMITE_INTERACOES` (padrão 15/dia).
+- **Ouvir** (`src/app/ouvir.tsx`): leitura com a Web Speech API (voz do aparelho, nada sai do dispositivo); divide o texto em trechos curtos e permite falar mais devagar.
+
 ## Próximos passos
 
 1. Obter o texto oficial das bulas (hoje o resumo é geral, gerado por IA).

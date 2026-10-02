@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { salvarPdf } from "@/lib/imprimir";
 import Aguarde from "../aguarde";
+import Ouvir from "../ouvir";
 import type { Resumo } from "@/lib/resumo";
 
 type Estado = { tipo: "carregando" } | { tipo: "erro"; mensagem: string } | { tipo: "pronto"; resumo: Resumo | null };
@@ -9,13 +11,6 @@ type Estado = { tipo: "carregando" } | { tipo: "erro"; mensagem: string } | { ti
 const BULARIO = "https://consultas.anvisa.gov.br/#/bulario/";
 
 const CARTAO = "space-y-2 rounded-2xl bg-white p-5 shadow-[0_6px_24px_-14px_rgba(18,20,26,0.35)] print:break-inside-avoid print:shadow-none print:border print:border-linha";
-
-function salvarPdf(nome: string) {
-  const tituloOriginal = document.title;
-  document.title = `Bulinha - ${nome}`; // vira o nome sugerido do arquivo PDF
-  window.addEventListener("afterprint", () => (document.title = tituloOriginal), { once: true });
-  window.print();
-}
 
 function Lista({ titulo, itens, alerta = false }: { titulo: string; itens: string[]; alerta?: boolean }) {
   if (itens.length === 0) return null;
@@ -29,6 +24,23 @@ function Lista({ titulo, itens, alerta = false }: { titulo: string; itens: strin
       </ul>
     </section>
   );
+}
+
+function textoParaOuvir(r: Resumo, nome: string): string[] {
+  const lista = (titulo: string, itens: string[]) => (itens.length ? [`${titulo}.`, ...itens.map((i) => i.replace(/[.;]?$/, "."))] : []);
+  return [
+    `Resumo de ${nome}.`,
+    "Atenção. Este é um resumo geral, feito por inteligência artificial. Não é a bula do seu medicamento, e pode ter erros. Confirme com o médico ou o farmacêutico.",
+    "Para que serve.",
+    r.para_que_serve,
+    "Como age no corpo.",
+    r.como_age,
+    ...lista("Efeitos que podem aparecer", r.efeitos_comuns),
+    ...lista("Procure atendimento médico se houver", r.efeitos_graves),
+    ...lista("Não use sem falar com o médico se", r.nao_use_se),
+    ...lista("Cuidados especiais", r.cuidados_especiais),
+    ...lista("Pode interagir com", r.interacoes),
+  ];
 }
 
 export default function ResumoGeral({ principio, nome }: { principio: string; nome: string }) {
@@ -110,9 +122,11 @@ export default function ResumoGeral({ principio, nome }: { principio: string; no
   return (
     <article className="space-y-5 print:space-y-3">
       {aviso}
+      <div className="space-y-4 print:hidden">
+        <Ouvir textos={textoParaOuvir(r, nome)} />
       <button
         type="button"
-        onClick={() => salvarPdf(nome)}
+        onClick={() => salvarPdf(`Bulinha - ${nome}`)}
         className="flex items-center gap-2 rounded-full bg-marca px-6 py-3 text-lg font-extrabold text-white hover:bg-marca-escura print:hidden"
       >
         <svg aria-hidden width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -120,6 +134,7 @@ export default function ResumoGeral({ principio, nome }: { principio: string; no
         </svg>
         Salvar em PDF
       </button>
+      </div>
       <section className={CARTAO}>
         <h3 className="text-xl font-extrabold">Para que serve</h3>
         <p>{r.para_que_serve}</p>

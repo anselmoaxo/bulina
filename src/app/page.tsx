@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Consulta from "./consulta";
 import { Logo, Pilulas } from "./logo";
+import LinkLista from "./link-lista";
 
 const ICONE = {
   fill: "none",
@@ -48,7 +49,10 @@ export default function Home() {
       >
         <Pilulas className="pointer-events-none absolute -right-24 top-40 -z-10 w-72 opacity-20 md:right-0 md:top-1/2 md:w-[28rem] md:-translate-y-1/2 md:opacity-100" />
         <div className="mx-auto max-w-5xl px-4 pb-14 pt-6 sm:pb-20">
-          <Logo claro />
+          <div className="flex items-center justify-between gap-4">
+            <Logo claro />
+            <LinkLista />
+          </div>
           <div className="mt-12 max-w-xl md:mt-16">
             <h1 className="text-5xl leading-[1.05] font-extrabold sm:text-6xl">
               Entenda o seu remédio em segundos

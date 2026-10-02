@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { buscarExato } from "@/lib/catalog";
 import { ehControlado, formatarClasse, formatarNome } from "@/lib/formatar";
 import { Logo } from "../logo";
+import BotaoLista from "./botao-lista";
 import ResumoGeral from "./resumo-geral";
 
 export default async function Medicamento({ searchParams }: PageProps<"/medicamento">) {
@@ -54,6 +55,8 @@ export default async function Medicamento({ searchParams }: PageProps<"/medicame
             </div>
           ))}
         </dl>
+
+        {m.principio && <BotaoLista nome={m.nome} principio={m.principio} />}
 
         {ehControlado(m.classe) && (
           <section role="note" className="space-y-1 rounded-2xl border-l-8 border-tarja bg-white p-5 print:break-inside-avoid">
