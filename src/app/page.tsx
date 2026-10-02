@@ -1,4 +1,5 @@
 import Busca from "./busca";
+import Foto from "./foto";
 
 export default function Home() {
   return (
@@ -9,6 +10,8 @@ export default function Home() {
           A bula do seu remédio, resumida e em linguagem simples.
         </p>
       </header>
+
+      <Foto />
 
       <Busca />
 

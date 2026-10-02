@@ -35,6 +35,18 @@ node scripts/build-catalog.mjs
 
 Detalhes e limites da fonte em `docs/spike-anvisa.md` (o texto da bula ainda não tem fonte definida).
 
+## Foto da caixa
+
+`POST /api/identificar` recebe a foto (`multipart`, campo `foto`; JPEG/PNG/WebP até 5 MB), usa a API do Claude para ler o nome na embalagem e devolve candidatos do catálogo para o usuário confirmar. A foto não é gravada. A tela reduz a imagem no aparelho antes de enviar.
+
+Variáveis de ambiente (no servidor; **nunca** commitar):
+
+| Variável | Uso |
+|---|---|
+| `ANTHROPIC_API_KEY` | Obrigatória para a foto. Local: `.env.local`. Produção: variáveis do projeto na Vercel. Sem ela, o endpoint responde 503 e a busca por nome continua funcionando. |
+| `BULINA_MODEL` | Opcional. Padrão `claude-opus-5-5`. |
+| `BULINA_LIMITE_DIARIO` | Opcional. Fotos por IP por dia (padrão 20, em memória por instância). |
+
 ## Próximos passos
 
 1. Definir a fonte de dados da ANVISA (catálogo e texto das bulas).
