@@ -2,17 +2,20 @@ import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 
-export const Resumo = z.object({
+// A geração é dividida em duas partes que rodam em paralelo (metade do tempo de espera).
+const ParteUm = z.object({
   reconhecido: z.boolean(),
   para_que_serve: z.string(),
   como_age: z.string(),
   efeitos_comuns: z.array(z.string()),
   efeitos_graves: z.array(z.string()),
+});
+const ParteDois = z.object({
   nao_use_se: z.array(z.string()),
   cuidados_especiais: z.array(z.string()),
   interacoes: z.array(z.string()),
 });
-export type Resumo = z.infer<typeof Resumo>;
+export type Resumo = z.infer<typeof ParteUm> & z.infer<typeof ParteDois>;
 
 const SISTEMA = `Você escreve resumos informativos sobre substâncias de medicamentos para o público geral brasileiro, em português do Brasil, em linguagem simples (nível de ensino fundamental), frases curtas, sem jargão. Quando precisar de um termo técnico, explique entre parênteses.
 
@@ -25,20 +28,35 @@ Regras:
 - Em cuidados_especiais, cubra gravidez, amamentação, idosos, crianças, álcool e direção/máquinas quando forem relevantes.
 - Em interacoes, liste os tipos de remédios ou substâncias mais importantes que interagem.
 - Se o princípio ativo é uma combinação, cubra cada componente e deixe claro de qual se trata em cada item.
-- Cada lista deve ter de 3 a 8 itens curtos. Se o nome não for uma substância de medicamento que você reconheça com segurança, responda reconhecido=false e deixe os textos vazios e as listas vazias.`;
+- Cada lista deve ter de 3 a 8 itens curtos. Se o nome não for uma substância de medicamento que você reconheça com segurança, responda reconhecido=false e deixe os textos e as listas vazios. Preencha apenas as seções pedidas na mensagem.`;
+
+async function gerarParte<T extends z.ZodType>(
+  client: Pick<Anthropic, "messages">,
+  schema: T,
+  principio: string,
+  secoes: string,
+): Promise<z.infer<T> | null> {
+  const resposta = await client.messages.parse({
+    model: process.env.BULINHA_MODEL ?? "claude-opus-5-5",
+    max_tokens: 4000,
+    system: SISTEMA,
+    output_config: { effort: "medium", format: zodOutputFormat(schema) },
+    messages: [
+      { role: "user", content: `Princípio ativo: ${principio}\n\nPreencha somente estas seções: ${secoes}.` },
+    ],
+  });
+  return resposta.parsed_output;
+}
 
 /** Gera o resumo geral de um princípio ativo. Não usa dados de pessoas. */
 export async function gerarResumo(
   client: Pick<Anthropic, "messages">,
   principio: string,
 ): Promise<Resumo | null> {
-  const resposta = await client.messages.parse({
-    model: process.env.BULINHA_MODEL ?? "claude-opus-5-5",
-    max_tokens: 6000,
-    system: SISTEMA,
-    output_config: { effort: "medium", format: zodOutputFormat(Resumo) },
-    messages: [{ role: "user", content: `Princípio ativo: ${principio}` }],
-  });
-  const r = resposta.parsed_output;
-  return r && r.reconhecido ? r : null;
+  const [um, dois] = await Promise.all([
+    gerarParte(client, ParteUm, principio, "reconhecido, para_que_serve, como_age, efeitos_comuns, efeitos_graves"),
+    gerarParte(client, ParteDois, principio, "nao_use_se, cuidados_especiais, interacoes"),
+  ]);
+  if (!um || !dois || !um.reconhecido) return null;
+  return { ...um, ...dois };
 }

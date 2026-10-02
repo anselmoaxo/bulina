@@ -59,7 +59,7 @@ export default function ResumoGeral({ principio }: { principio: string }) {
     return (
       <section aria-live="polite" className="space-y-4">
         {aviso}
-        <p className="text-muted">Preparando o resumo. Na primeira consulta isso pode levar até um minuto.</p>
+        <p className="text-muted">Preparando o resumo. Na primeira consulta de cada remédio isso leva alguns segundos.</p>
       </section>
     );
   }
