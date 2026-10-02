@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Medicamento } from "@/lib/catalog";
 
@@ -51,12 +52,17 @@ export default function Busca() {
       )}
       <ul className="divide-y divide-zinc-200 rounded-lg border border-zinc-200">
         {lista.map((m) => (
-          <li key={`${m.nome}|${m.principio}`} className="px-4 py-3">
-            <p className="font-medium">{m.nome}</p>
-            <p className="text-sm text-zinc-600">
-              {m.principio || "Princípio ativo não informado"}
-              {m.categoria && ` · ${m.categoria}`}
-            </p>
+          <li key={`${m.nome}|${m.principio}`}>
+            <Link
+              href={`/medicamento?nome=${encodeURIComponent(m.nome)}&principio=${encodeURIComponent(m.principio)}`}
+              className="block px-4 py-3 hover:bg-zinc-50"
+            >
+              <p className="font-medium">{m.nome}</p>
+              <p className="text-sm text-zinc-600">
+                {m.principio || "Princípio ativo não informado"}
+                {m.categoria && ` · ${m.categoria}`}
+              </p>
+            </Link>
           </li>
         ))}
       </ul>
