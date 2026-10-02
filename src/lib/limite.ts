@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { banco } from "./db";
 
 // Limite diário de consultas novas por IP. Com o banco (Neon) o contador é compartilhado entre todos os
@@ -44,4 +45,16 @@ export const MENSAGEM_LIMITE =
 
 export function ipDe(request: Request): string {
   return request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "desconhecido";
+}
+
+/**
+ * Pré-geração em lote (scripts/aquecer-cache.mjs): quem envia o token de administrador não gasta consulta.
+ * Fica desligado se BULINHA_ADMIN_TOKEN não existir ou tiver menos de 32 caracteres.
+ */
+export function ehAdmin(request: Request): boolean {
+  const token = process.env.BULINHA_ADMIN_TOKEN;
+  if (!token || token.length < 32) return false;
+  const enviado = Buffer.from(request.headers.get("x-bulinha-admin") ?? "");
+  const esperado = Buffer.from(token);
+  return enviado.length === esperado.length && timingSafeEqual(enviado, esperado);
 }

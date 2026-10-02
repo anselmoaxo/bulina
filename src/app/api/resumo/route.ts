@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { principioExiste } from "@/lib/catalog";
-import { MENSAGEM_LIMITE, consumirConsulta, ipDe } from "@/lib/limite";
+import { MENSAGEM_LIMITE, consumirConsulta, ehAdmin, ipDe } from "@/lib/limite";
 import { gravarCacheIA, lerCacheIA } from "@/lib/cache-ia";
 import { gerarResumo, type Resumo } from "@/lib/resumo";
 
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
   if (!process.env.ANTHROPIC_API_KEY) return erro("Resumo indisponível no momento.", 503);
 
   const ip = ipDe(request);
-  const consumo = await consumirConsulta(ip);
+  const consumo = ehAdmin(request) ? { devolver: async () => {} } : await consumirConsulta(ip);
   if (!consumo) return erro(MENSAGEM_LIMITE, 429);
 
   try {

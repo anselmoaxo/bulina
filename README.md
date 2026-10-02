@@ -47,11 +47,22 @@ Variáveis de ambiente (no servidor; **nunca** commitar):
 | `BULINHA_MODEL` | Opcional. Padrão `claude-opus-5-5`. |
 | `DATABASE_URL` | Postgres (Neon, via Marketplace da Vercel). Guarda o contador de consultas por IP e os resultados de IA já gerados; as tabelas `bulinha_limite` e `bulinha_cache` são criadas sozinhas na primeira execução. Sem ela, o app usa só a memória do servidor. |
 | `BULINHA_SEGREDO` | Opcional. Segredo misturado ao hash do IP (padrão: derivado de `DATABASE_URL`). |
+| `BULINHA_ADMIN_TOKEN` | Opcional (32+ caracteres). Senha usada só por `scripts/aquecer-cache.mjs` para gerar resumos em lote sem gastar o limite diário. Sem ela, o recurso fica desligado. |
 | `BULINHA_LIMITE_DIARIO` | Opcional. Consultas novas por IP por dia, somando foto, resumo e interações (padrão 5; contador compartilhado no banco). Resultados já em cache não contam; falha da IA devolve a consulta. |
 
 ## Resumo por princípio ativo
 
 `GET /api/resumo?principio=...` gera, com o Claude, um resumo geral da substância (para que serve, efeitos, contraindicações, cuidados, interações), sem doses. **Não é a bula do produto**; a tela deixa isso explícito e aponta o Bulário da ANVISA. Só aceita princípios ativos que existem no catálogo. O resultado é guardado no banco e na CDN da Vercel, então cada princípio ativo é gerado uma única vez (mude `VERSAO` em `src/lib/cache-ia.ts` ao melhorar o prompt, para regenerar).
+
+## Pré-gerar resumos (cache aquecido)
+
+```bash
+node scripts/aquecer-cache.mjs --limite 300 --listar                    # só mostra a lista, não gasta nada
+BULINHA_ADMIN_TOKEN=... node scripts/aquecer-cache.mjs --limite 10      # teste pequeno: confira o custo no Console da Anthropic
+BULINHA_ADMIN_TOKEN=... node scripts/aquecer-cache.mjs --limite 300     # lote completo
+```
+
+O script chama `/api/resumo` do próprio site (as chaves da IA e do banco ficam só na Vercel). A lista começa pelas substâncias mais usadas no Brasil e completa pelo catálogo. Pode ser interrompido e repetido: o que já foi gerado volta do cache na hora.
 
 ## Meus remédios e leitura em voz alta
 
