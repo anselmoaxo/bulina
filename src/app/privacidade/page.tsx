@@ -42,7 +42,7 @@ export default function Privacidade() {
       <section className="space-y-2">
         <h2 className="text-xl font-extrabold">Dados técnicos</h2>
         <p>
-          Para limitar o número de fotos por dia, o servidor usa seu endereço IP temporariamente, em
+          Para gerar o resumo de um medicamento, enviamos à Anthropic apenas o nome do princípio ativo, sem nenhum dado seu. Para limitar o número de fotos e resumos por dia, o servidor usa seu endereço IP temporariamente, em
           memória, sem gravar em banco de dados. A hospedagem (Vercel) pode registrar dados técnicos
           de acesso, como IP e navegador, conforme a política dela. Guardamos no seu aparelho apenas
           a marca de que você concordou com o uso da câmera. Não usamos cookies de rastreamento nem

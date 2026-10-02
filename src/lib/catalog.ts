@@ -69,3 +69,10 @@ export function buscar(consulta: string, limite = 15): Medicamento[] {
 export function buscarExato(nome: string, principio: string): Medicamento | undefined {
   return (catalog as Medicamento[]).find((m) => m.nome === nome && m.principio === principio);
 }
+
+const principios = new Set((catalog as Medicamento[]).map((m) => m.principio).filter(Boolean));
+
+/** Só princípios ativos do catálogo podem gerar resumo (evita uso do endpoint para textos arbitrários). */
+export function principioExiste(principio: string): boolean {
+  return principios.has(principio);
+}

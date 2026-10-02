@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buscarExato } from "@/lib/catalog";
+import ResumoGeral from "./resumo-geral";
 import { ehControlado, formatarClasse, formatarNome } from "@/lib/formatar";
 
 export default async function Medicamento({ searchParams }: PageProps<"/medicamento">) {
@@ -46,21 +47,28 @@ export default async function Medicamento({ searchParams }: PageProps<"/medicame
         </section>
       )}
 
-      <section className="space-y-2 border-l-8 border-tarja bg-white p-4">
-        <h2 className="text-lg font-extrabold">O resumo da bula ainda não está disponível</h2>
-        <p>
-          Para saber para que serve, como usar e quais efeitos podem aparecer, leia a bula oficial no{" "}
-          <a
-            className="font-bold underline"
-            href="https://consultas.anvisa.gov.br/#/bulario/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Bulário Eletrônico da ANVISA
-          </a>
-          .
-        </p>
-      </section>
+      {m.principio ? (
+        <section className="space-y-5">
+          <h2 className="text-2xl font-extrabold">Resumo</h2>
+          <ResumoGeral principio={m.principio} />
+        </section>
+      ) : (
+        <section className="space-y-2 border-l-8 border-tarja bg-white p-4">
+          <h2 className="text-lg font-extrabold">Resumo indisponível</h2>
+          <p>
+            Este registro não informa o princípio ativo. Leia a bula oficial no{" "}
+            <a
+              className="font-bold underline"
+              href="https://consultas.anvisa.gov.br/#/bulario/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Bulário Eletrônico da ANVISA
+            </a>
+            .
+          </p>
+        </section>
+      )}
 
       <footer className="mt-auto border-t border-linha pt-5 text-muted">
         O Bulinha não substitui a orientação de um médico ou farmacêutico. Não se automedique.

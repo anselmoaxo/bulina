@@ -47,9 +47,13 @@ Variáveis de ambiente (no servidor; **nunca** commitar):
 | `BULINHA_MODEL` | Opcional. Padrão `claude-opus-5-5`. |
 | `BULINHA_LIMITE_DIARIO` | Opcional. Fotos por IP por dia (padrão 20, em memória por instância). |
 
+## Resumo por princípio ativo
+
+`GET /api/resumo?principio=...` gera, com o Claude, um resumo geral da substância (para que serve, efeitos, contraindicações, cuidados, interações), sem doses. **Não é a bula do produto**; a tela deixa isso explícito e aponta o Bulário da ANVISA. Só aceita princípios ativos que existem no catálogo. O resultado é guardado na CDN da Vercel por 30 dias (`s-maxage`), então cada princípio ativo é gerado poucas vezes. Limite por IP para gerações novas: `BULINHA_LIMITE_RESUMOS` (padrão 40/dia).
+
 ## Próximos passos
 
-1. Definir a fonte de dados da ANVISA (catálogo e texto das bulas).
+1. Obter o texto oficial das bulas (hoje o resumo é geral, gerado por IA).
 2. Busca por nome e resumo estruturado.
 3. Foto da caixa com confirmação.
 4. Política de privacidade, limite diário e deploy.
