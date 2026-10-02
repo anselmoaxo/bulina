@@ -17,8 +17,8 @@ function CapsulaBalancando() {
   return (
     <svg aria-hidden width="72" height="72" viewBox="0 0 120 120" className="anim-balanco shrink-0">
       <g transform="rotate(-40 60 60)">
-        <rect x="12" y="38" width="96" height="44" rx="22" fill="#2563eb" />
-        <path d="M60 38h26a22 22 0 0 1 0 44H60z" fill="#93c5fd" />
+        <rect x="12" y="38" width="96" height="44" rx="22" fill="#2b3fe0" />
+        <path d="M60 38h26a22 22 0 0 1 0 44H60z" fill="#a5b0f5" />
       </g>
     </svg>
   );

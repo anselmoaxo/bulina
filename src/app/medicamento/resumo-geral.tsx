@@ -8,7 +8,7 @@ type Estado = { tipo: "carregando" } | { tipo: "erro"; mensagem: string } | { ti
 
 const BULARIO = "https://consultas.anvisa.gov.br/#/bulario/";
 
-const CARTAO = "space-y-2 rounded-2xl bg-white p-5 shadow-[0_6px_24px_-14px_rgba(15,23,42,0.35)] print:break-inside-avoid print:shadow-none print:border print:border-linha";
+const CARTAO = "space-y-2 rounded-2xl bg-white p-5 shadow-[0_6px_24px_-14px_rgba(18,20,26,0.35)] print:break-inside-avoid print:shadow-none print:border print:border-linha";
 
 function salvarPdf(nome: string) {
   const tituloOriginal = document.title;

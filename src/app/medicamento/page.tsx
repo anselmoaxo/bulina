@@ -21,7 +21,7 @@ export default async function Medicamento({ searchParams }: PageProps<"/medicame
 
   return (
     <main className="flex flex-1 flex-col">
-      <header className="bg-marinho bg-[radial-gradient(70%_120%_at_100%_0%,#2563eb_0%,transparent_70%)] text-white print:bg-white print:bg-none print:text-ink">
+      <header className="bg-marinho bg-[radial-gradient(70%_120%_at_100%_0%,#2b3fe0_0%,transparent_70%)] text-white print:bg-white print:bg-none print:text-ink">
         <div className="mx-auto max-w-3xl px-4 pb-16 pt-6 print:pb-2">
           <div className="flex items-center justify-between gap-4 print:hidden">
             <Logo claro />
@@ -43,7 +43,7 @@ export default async function Medicamento({ searchParams }: PageProps<"/medicame
       </header>
 
       <div className="mx-auto w-full max-w-3xl flex-1 space-y-8 px-4 pb-12 print:space-y-4">
-        <dl className="-mt-8 rounded-3xl bg-white p-2 shadow-[0_12px_40px_-14px_rgba(15,23,42,0.4)] print:mt-0 print:rounded-none print:border print:border-linha print:shadow-none">
+        <dl className="-mt-8 rounded-3xl bg-white p-2 shadow-[0_12px_40px_-14px_rgba(18,20,26,0.4)] print:mt-0 print:rounded-none print:border print:border-linha print:shadow-none">
           {dados.map(([rotulo, valor], i) => (
             <div
               key={rotulo}

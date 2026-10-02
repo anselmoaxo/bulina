@@ -44,7 +44,7 @@ export default function Home() {
     <main className="flex flex-1 flex-col">
       <section
         className="relative isolate overflow-hidden bg-marinho text-white"
-        style={{ backgroundImage: "radial-gradient(70% 90% at 90% 0%, #2563eb 0%, transparent 70%)" }}
+        style={{ backgroundImage: "radial-gradient(70% 90% at 90% 0%, #2b3fe0 0%, transparent 70%)" }}
       >
         <Pilulas className="pointer-events-none absolute -right-24 top-40 -z-10 w-72 opacity-20 md:right-0 md:top-1/2 md:w-[28rem] md:-translate-y-1/2 md:opacity-100" />
         <div className="mx-auto max-w-5xl px-4 pb-14 pt-6 sm:pb-20">
@@ -80,7 +80,7 @@ export default function Home() {
           <h2 className="text-3xl font-extrabold">Como funciona</h2>
           <ol className="grid gap-4 md:grid-cols-3">
             {PASSOS.map((p, i) => (
-              <li key={p.titulo} className="rounded-3xl bg-white p-6 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.25)]">
+              <li key={p.titulo} className="rounded-3xl bg-white p-6 shadow-[0_8px_30px_-12px_rgba(18,20,26,0.25)]">
                 <span className="flex size-12 items-center justify-center rounded-full bg-marca text-xl font-extrabold text-white">
                   {i + 1}
                 </span>
