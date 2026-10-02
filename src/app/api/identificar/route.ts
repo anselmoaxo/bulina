@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { buscar } from "@/lib/catalog";
-import { dentroDoLimite } from "@/lib/limite";
+import { MENSAGEM_LIMITE, consumirConsulta, devolverConsulta, ipDe } from "@/lib/limite";
 import { TIPOS_IMAGEM, lerCaixa, type TipoImagem } from "@/lib/ler-caixa";
 
 const TAMANHO_MAX = 5 * 1024 * 1024;
@@ -12,11 +12,6 @@ export async function POST(request: Request) {
     return erro("Leitura por foto indisponível no momento. Busque pelo nome.", 503);
   }
 
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "desconhecido";
-  if (!dentroDoLimite(ip)) {
-    return erro("Limite diário de fotos atingido. Tente amanhã ou busque pelo nome.", 429);
-  }
-
   const form = await request.formData().catch(() => null);
   const foto = form?.get("foto");
   if (!(foto instanceof File)) return erro("Envie uma foto.", 400);
@@ -24,6 +19,9 @@ export async function POST(request: Request) {
     return erro("Formato não suportado. Use JPEG, PNG ou WebP.", 400);
   }
   if (foto.size > TAMANHO_MAX) return erro("Foto muito grande (máx. 5 MB).", 413);
+
+  const ip = ipDe(request);
+  if (!consumirConsulta(ip)) return erro(`${MENSAGEM_LIMITE} A busca pelo nome continua funcionando.`, 429);
 
   try {
     const base64 = Buffer.from(await foto.arrayBuffer()).toString("base64");
@@ -37,6 +35,7 @@ export async function POST(request: Request) {
     }
     return Response.json({ leitura, candidatos });
   } catch {
+    devolverConsulta(ip);
     return erro("Não foi possível ler a foto agora. Tente de novo ou busque pelo nome.", 502);
   }
 }

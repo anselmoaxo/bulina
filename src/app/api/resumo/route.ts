@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { principioExiste } from "@/lib/catalog";
-import { dentroDoLimite } from "@/lib/limite";
+import { MENSAGEM_LIMITE, consumirConsulta, devolverConsulta, ipDe } from "@/lib/limite";
 import { gerarResumo, type Resumo } from "@/lib/resumo";
 
 export const maxDuration = 60;
@@ -20,16 +20,15 @@ export async function GET(request: Request) {
 
   if (!process.env.ANTHROPIC_API_KEY) return erro("Resumo indisponível no momento.", 503);
 
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "desconhecido";
-  if (!dentroDoLimite(ip, "resumo", Number(process.env.BULINHA_LIMITE_RESUMOS ?? 40))) {
-    return erro("Muitas consultas hoje. Tente novamente amanhã.", 429);
-  }
+  const ip = ipDe(request);
+  if (!consumirConsulta(ip)) return erro(MENSAGEM_LIMITE, 429);
 
   try {
     const resumo = await gerarResumo(new Anthropic(), principio);
     memoria.set(principio, resumo);
     return Response.json({ resumo }, { headers: cabecalhos });
   } catch {
+    devolverConsulta(ip);
     return erro("Não foi possível gerar o resumo agora. Tente de novo.", 502);
   }
 }

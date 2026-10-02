@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { principioExiste } from "@/lib/catalog";
 import { MAX_ITENS, gerarInteracoes, type Interacoes } from "@/lib/interacoes";
-import { dentroDoLimite } from "@/lib/limite";
+import { MENSAGEM_LIMITE, consumirConsulta, devolverConsulta, ipDe } from "@/lib/limite";
 
 export const maxDuration = 60;
 
@@ -24,16 +24,15 @@ export async function GET(request: Request) {
 
   if (!process.env.ANTHROPIC_API_KEY) return erro("Checagem indisponível no momento.", 503);
 
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "desconhecido";
-  if (!dentroDoLimite(ip, "interacoes", Number(process.env.BULINHA_LIMITE_INTERACOES ?? 15))) {
-    return erro("Muitas checagens hoje. Tente novamente amanhã.", 429);
-  }
+  const ip = ipDe(request);
+  if (!consumirConsulta(ip)) return erro(MENSAGEM_LIMITE, 429);
 
   try {
     const interacoes = await gerarInteracoes(new Anthropic(), principios);
     memoria.set(chave, interacoes);
     return Response.json({ interacoes }, { headers: cabecalhos });
   } catch {
+    devolverConsulta(ip);
     return erro("Não foi possível checar agora. Tente de novo.", 502);
   }
 }

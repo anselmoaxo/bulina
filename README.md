@@ -45,15 +45,15 @@ Variáveis de ambiente (no servidor; **nunca** commitar):
 |---|---|
 | `ANTHROPIC_API_KEY` | Obrigatória para a foto. Local: `.env.local`. Produção: variáveis do projeto na Vercel. Sem ela, o endpoint responde 503 e a busca por nome continua funcionando. |
 | `BULINHA_MODEL` | Opcional. Padrão `claude-opus-5-5`. |
-| `BULINHA_LIMITE_DIARIO` | Opcional. Fotos por IP por dia (padrão 20, em memória por instância). |
+| `BULINHA_LIMITE_DIARIO` | Opcional. Consultas novas por IP por dia, somando foto, resumo e interações (padrão 5, em memória por instância). Resultados já em cache não contam; falha da IA devolve a consulta. |
 
 ## Resumo por princípio ativo
 
-`GET /api/resumo?principio=...` gera, com o Claude, um resumo geral da substância (para que serve, efeitos, contraindicações, cuidados, interações), sem doses. **Não é a bula do produto**; a tela deixa isso explícito e aponta o Bulário da ANVISA. Só aceita princípios ativos que existem no catálogo. O resultado é guardado na CDN da Vercel por 30 dias (`s-maxage`), então cada princípio ativo é gerado poucas vezes. Limite por IP para gerações novas: `BULINHA_LIMITE_RESUMOS` (padrão 40/dia).
+`GET /api/resumo?principio=...` gera, com o Claude, um resumo geral da substância (para que serve, efeitos, contraindicações, cuidados, interações), sem doses. **Não é a bula do produto**; a tela deixa isso explícito e aponta o Bulário da ANVISA. Só aceita princípios ativos que existem no catálogo. O resultado é guardado na CDN da Vercel por 30 dias (`s-maxage`), então cada princípio ativo é gerado poucas vezes.
 
 ## Meus remédios e leitura em voz alta
 
-- **Meus remédios** (`/meus-remedios`): lista de até 10 remédios guardada só no aparelho (`localStorage`), sem login. `GET /api/interacoes?p=...` recebe apenas princípios ativos (validados no catálogo) e gera, com o Claude, possíveis interações e substâncias repetidas; cache de 30 dias na CDN. Duplicidades de princípio ativo idênticas são detectadas no próprio navegador, sem IA. Limite por IP: `BULINHA_LIMITE_INTERACOES` (padrão 15/dia).
+- **Meus remédios** (`/meus-remedios`): lista de até 10 remédios guardada só no aparelho (`localStorage`), sem login. `GET /api/interacoes?p=...` recebe apenas princípios ativos (validados no catálogo) e gera, com o Claude, possíveis interações e substâncias repetidas; cache de 30 dias na CDN. Duplicidades de princípio ativo idênticas são detectadas no próprio navegador, sem IA.
 - **Ouvir** (`src/app/ouvir.tsx`): leitura com a Web Speech API (voz do aparelho, nada sai do dispositivo); divide o texto em trechos curtos e permite falar mais devagar.
 
 ## Próximos passos

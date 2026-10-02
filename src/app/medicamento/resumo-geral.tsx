@@ -6,7 +6,7 @@ import Aguarde from "../aguarde";
 import Ouvir from "../ouvir";
 import type { Resumo } from "@/lib/resumo";
 
-type Estado = { tipo: "carregando" } | { tipo: "erro"; mensagem: string } | { tipo: "pronto"; resumo: Resumo | null };
+type Estado = { tipo: "carregando" } | { tipo: "erro"; mensagem: string; limite?: boolean } | { tipo: "pronto"; resumo: Resumo | null };
 
 const BULARIO = "https://consultas.anvisa.gov.br/#/bulario/";
 
@@ -54,11 +54,13 @@ export default function ResumoGeral({ principio, nome }: { principio: string; no
       try {
         const res = await fetch(`/api/resumo?principio=${encodeURIComponent(principio)}`);
         const dados = await res.json();
-        if (!res.ok) throw new Error(dados.erro ?? "Não foi possível carregar o resumo.");
+        if (!res.ok) {
+          if (ativo) setEstado({ tipo: "erro", mensagem: dados.erro ?? "Não foi possível carregar o resumo.", limite: res.status === 429 });
+          return;
+        }
         if (ativo) setEstado({ tipo: "pronto", resumo: dados.resumo });
-      } catch (e) {
-        const mensagem = (e as Error).message || "Não foi possível carregar o resumo.";
-        if (ativo) setEstado({ tipo: "erro", mensagem });
+      } catch {
+        if (ativo) setEstado({ tipo: "erro", mensagem: "Não foi possível carregar o resumo." });
       }
     })();
     return () => {
@@ -95,16 +97,18 @@ export default function ResumoGeral({ principio, nome }: { principio: string; no
       <section className="space-y-4">
         {aviso}
         <p role="alert">{estado.mensagem}</p>
-        <button
-          type="button"
-          onClick={() => {
-            setEstado({ tipo: "carregando" });
-            setTentativa((n) => n + 1);
-          }}
-          className="rounded-full border-2 border-ink px-6 py-3 font-bold hover:bg-white"
-        >
-          Tentar de novo
-        </button>
+        {!estado.limite && (
+          <button
+            type="button"
+            onClick={() => {
+              setEstado({ tipo: "carregando" });
+              setTentativa((n) => n + 1);
+            }}
+            className="rounded-full border-2 border-ink px-6 py-3 font-bold hover:bg-white"
+          >
+            Tentar de novo
+          </button>
+        )}
       </section>
     );
   }
