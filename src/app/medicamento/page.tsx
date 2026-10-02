@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { buscarExato } from "@/lib/catalog";
-import { formatarNome, primeiraMaiuscula } from "@/lib/formatar";
+import { ehControlado, formatarClasse, formatarNome } from "@/lib/formatar";
 
 export default async function Medicamento({ searchParams }: PageProps<"/medicamento">) {
   const { nome, principio } = await searchParams;
@@ -11,7 +11,7 @@ export default async function Medicamento({ searchParams }: PageProps<"/medicame
 
   const dados = [
     ["Princípio ativo", m.principio ? formatarNome(m.principio) : "não informado"],
-    ["Classe", m.classe ? primeiraMaiuscula(m.classe) : ""],
+    ["Classe", m.classe ? formatarClasse(m.classe) : ""],
     ["Categoria", m.categoria],
   ].filter(([, v]) => v);
 
@@ -35,6 +35,16 @@ export default async function Medicamento({ searchParams }: PageProps<"/medicame
           ))}
         </dl>
       </header>
+
+      {ehControlado(m.classe) && (
+        <section role="note" className="space-y-1 border-l-8 border-tarja bg-white p-4">
+          <h2 className="text-lg font-extrabold">Medicamento controlado</h2>
+          <p>
+            Esta classe de remédio só deve ser usada com receita e acompanhamento de um médico.
+            Não use por conta própria.
+          </p>
+        </section>
+      )}
 
       <section className="space-y-2 border-l-8 border-tarja bg-white p-4">
         <h2 className="text-lg font-extrabold">O resumo da bula ainda não está disponível</h2>
