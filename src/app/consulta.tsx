@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Medicamento } from "@/lib/catalog";
 import { formatarNome } from "@/lib/formatar";
+import Aguarde from "./aguarde";
 
 type LeituraFoto = {
   leitura: { encontrado: boolean; nome: string; principio_ativo: string };
@@ -107,10 +108,13 @@ export default function Consulta() {
 
   const lista = q.trim().length >= 2 ? resultados : [];
 
+  const temPainel =
+    consentimento || lendo || !!erroFoto || !!foto || erroBusca || q.trim().length >= 2;
+
   return (
-    <section className="space-y-5">
+    <section className="space-y-4">
       {/* Cápsula: campo de texto à esquerda, foto à direita. */}
-      <div className="flex h-16 overflow-hidden rounded-full border-2 border-ink bg-white focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-folha">
+      <div className="flex h-[4.5rem] overflow-hidden rounded-full bg-white text-ink shadow-[0_16px_40px_-10px_rgba(0,0,0,0.55)] focus-within:outline-4 focus-within:outline-offset-4 focus-within:outline-menta">
         <label htmlFor="busca" className="sr-only">
           Nome do remédio ou princípio ativo
         </label>
@@ -121,15 +125,15 @@ export default function Consulta() {
           onChange={(e) => setQ(e.target.value)}
           placeholder="Nome do remédio"
           autoComplete="off"
-          className="min-w-0 flex-1 bg-transparent pl-6 pr-2 text-lg outline-none placeholder:text-muted"
+          className="min-w-0 flex-1 bg-transparent pl-7 pr-2 text-xl outline-none placeholder:text-muted"
         />
         <button
           type="button"
           disabled={lendo}
           onClick={() => (jaConsentiu() ? inputFoto.current?.click() : setConsentimento(true))}
-          className="flex shrink-0 items-center gap-2 bg-folha pl-4 pr-5 font-bold text-white hover:bg-folha-escura disabled:opacity-70"
+          className="flex shrink-0 items-center gap-2 bg-menta pl-5 pr-7 text-lg font-extrabold text-ink hover:bg-white disabled:opacity-70"
         >
-          <svg aria-hidden width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg aria-hidden width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
             <circle cx="12" cy="13" r="3.5" />
           </svg>
@@ -151,6 +155,15 @@ export default function Consulta() {
           }}
         />
       </div>
+
+      {temPainel && (
+        <div className="space-y-4 rounded-3xl bg-white p-4 text-ink shadow-[0_16px_40px_-10px_rgba(0,0,0,0.45)]">
+      {lendo && (
+        <Aguarde
+          titulo="Lendo a caixa"
+          etapas={["Enviando a foto…", "Procurando o nome do remédio…", "Quase pronto…"]}
+        />
+      )}
 
       {consentimento && (
         <div role="dialog" aria-label="Uso da foto" className="space-y-4 border-l-8 border-folha bg-bula p-4">
@@ -223,6 +236,8 @@ export default function Consulta() {
         <p className="text-muted">Nenhum medicamento ativo encontrado com esse nome.</p>
       )}
       {lista.length > 0 && <Lista itens={lista} />}
+      </div>
+      )}
     </section>
   );
 }

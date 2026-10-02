@@ -28,7 +28,7 @@ Regras:
 - Em cuidados_especiais, cubra gravidez, amamentação, idosos, crianças, álcool e direção/máquinas quando forem relevantes.
 - Em interacoes, liste os tipos de remédios ou substâncias mais importantes que interagem.
 - Se o princípio ativo é uma combinação, cubra cada componente e deixe claro de qual se trata em cada item.
-- Cada lista deve ter de 3 a 8 itens curtos. Se o nome não for uma substância de medicamento que você reconheça com segurança, responda reconhecido=false e deixe os textos e as listas vazios. Preencha apenas as seções pedidas na mensagem.`;
+- Cada lista deve ter de 3 a 6 itens curtos, e cada texto corrido no máximo 2 frases. Se o nome não for uma substância de medicamento que você reconheça com segurança, responda reconhecido=false e deixe os textos e as listas vazios. Preencha apenas as seções pedidas na mensagem.`;
 
 async function gerarParte<T extends z.ZodType>(
   client: Pick<Anthropic, "messages">,
@@ -40,7 +40,7 @@ async function gerarParte<T extends z.ZodType>(
     model: process.env.BULINHA_MODEL ?? "claude-opus-5-5",
     max_tokens: 4000,
     system: SISTEMA,
-    output_config: { effort: "medium", format: zodOutputFormat(schema) },
+    output_config: { effort: "low", format: zodOutputFormat(schema) },
     messages: [
       { role: "user", content: `Princípio ativo: ${principio}\n\nPreencha somente estas seções: ${secoes}.` },
     ],
