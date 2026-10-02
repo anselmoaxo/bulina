@@ -60,8 +60,11 @@ export default function Privacidade() {
       <section className="space-y-2">
         <h2 className="text-xl font-extrabold">Dados técnicos</h2>
         <p>
-          Para gerar o resumo de um medicamento, enviamos à Anthropic apenas o nome do princípio ativo, sem nenhum dado seu. Para limitar o número de fotos e resumos por dia, o servidor usa seu endereço IP temporariamente, em
-          memória, sem gravar em banco de dados. A hospedagem (Vercel) pode registrar dados técnicos
+          Para gerar o resumo de um medicamento, enviamos à Anthropic apenas o nome do princípio ativo, sem
+          nenhum dado seu. Para limitar o número de consultas por dia, guardamos em um banco de dados uma
+          versão embaralhada (hash) do seu endereço IP, que muda a cada dia e não permite descobrir o IP
+          original; esses registros são apagados depois de um dia. Os resumos gerados ficam guardados para
+          todos e não contêm dado pessoal. A hospedagem (Vercel) pode registrar dados técnicos
           de acesso, como IP e navegador, conforme a política dela. Guardamos no seu aparelho apenas
           a marca de que você concordou com o uso da câmera. Não usamos cookies de rastreamento nem
           anúncios.

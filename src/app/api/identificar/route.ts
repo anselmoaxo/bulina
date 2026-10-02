@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { buscar } from "@/lib/catalog";
-import { MENSAGEM_LIMITE, consumirConsulta, devolverConsulta, ipDe } from "@/lib/limite";
+import { MENSAGEM_LIMITE, consumirConsulta, ipDe } from "@/lib/limite";
 import { TIPOS_IMAGEM, lerCaixa, type TipoImagem } from "@/lib/ler-caixa";
 
 const TAMANHO_MAX = 5 * 1024 * 1024;
@@ -21,7 +21,8 @@ export async function POST(request: Request) {
   if (foto.size > TAMANHO_MAX) return erro("Foto muito grande (máx. 5 MB).", 413);
 
   const ip = ipDe(request);
-  if (!consumirConsulta(ip)) return erro(`${MENSAGEM_LIMITE} A busca pelo nome continua funcionando.`, 429);
+  const consumo = await consumirConsulta(ip);
+  if (!consumo) return erro(`${MENSAGEM_LIMITE} A busca pelo nome continua funcionando.`, 429);
 
   try {
     const base64 = Buffer.from(await foto.arrayBuffer()).toString("base64");
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
     }
     return Response.json({ leitura, candidatos });
   } catch {
-    devolverConsulta(ip);
+    await consumo.devolver();
     return erro("Não foi possível ler a foto agora. Tente de novo ou busque pelo nome.", 502);
   }
 }

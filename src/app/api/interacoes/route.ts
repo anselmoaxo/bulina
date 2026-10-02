@@ -1,11 +1,10 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { principioExiste } from "@/lib/catalog";
+import { gravarCacheIA, lerCacheIA } from "@/lib/cache-ia";
 import { MAX_ITENS, gerarInteracoes, type Interacoes } from "@/lib/interacoes";
-import { MENSAGEM_LIMITE, consumirConsulta, devolverConsulta, ipDe } from "@/lib/limite";
+import { MENSAGEM_LIMITE, consumirConsulta, ipDe } from "@/lib/limite";
 
 export const maxDuration = 60;
-
-const memoria = new Map<string, Interacoes | null>();
 
 const erro = (mensagem: string, status: number) =>
   Response.json({ erro: mensagem }, { status, headers: { "Cache-Control": "no-store" } });
@@ -20,19 +19,21 @@ export async function GET(request: Request) {
 
   const cabecalhos = { "Cache-Control": "public, s-maxage=2592000, stale-while-revalidate=604800" };
   const chave = principios.join("|");
-  if (memoria.has(chave)) return Response.json({ interacoes: memoria.get(chave) }, { headers: cabecalhos });
+  const guardado = await lerCacheIA<Interacoes | null>("interacoes", chave);
+  if (guardado) return Response.json({ interacoes: guardado.valor }, { headers: cabecalhos });
 
   if (!process.env.ANTHROPIC_API_KEY) return erro("Checagem indisponível no momento.", 503);
 
   const ip = ipDe(request);
-  if (!consumirConsulta(ip)) return erro(MENSAGEM_LIMITE, 429);
+  const consumo = await consumirConsulta(ip);
+  if (!consumo) return erro(MENSAGEM_LIMITE, 429);
 
   try {
     const interacoes = await gerarInteracoes(new Anthropic(), principios);
-    memoria.set(chave, interacoes);
+    await gravarCacheIA("interacoes", chave, interacoes);
     return Response.json({ interacoes }, { headers: cabecalhos });
   } catch {
-    devolverConsulta(ip);
+    await consumo.devolver();
     return erro("Não foi possível checar agora. Tente de novo.", 502);
   }
 }

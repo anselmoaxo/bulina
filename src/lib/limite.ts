@@ -1,24 +1,42 @@
-// Limite diário de consultas novas por IP, em memória. Em ambiente serverless vale por instância:
-// serve como freio de custo no MVP, não como garantia forte.
+import { banco } from "./db";
+
+// Limite diário de consultas novas por IP. Com o banco (Neon) o contador é compartilhado entre todos os
+// servidores; sem ele (ou se o banco falhar) cai para a memória do servidor, que é um freio mais fraco.
 // Resultados já guardados em cache não passam por aqui e não gastam consulta.
 export const LIMITE_DIARIO = Number(process.env.BULINHA_LIMITE_DIARIO ?? 5);
 
-const usos = new Map<string, { dia: string; n: number }>();
+const memoria = new Map<string, { dia: string; n: number }>();
 const hoje = () => new Date().toISOString().slice(0, 10);
 
-/** Tenta gastar uma consulta do IP. Retorna false se o limite do dia já foi atingido. */
-export function consumirConsulta(ip: string): boolean {
-  const atual = usos.get(ip);
+function consumirMemoria(ip: string): boolean {
+  const atual = memoria.get(ip);
   const n = atual && atual.dia === hoje() ? atual.n : 0;
   if (n >= LIMITE_DIARIO) return false;
-  usos.set(ip, { dia: hoje(), n: n + 1 });
+  memoria.set(ip, { dia: hoje(), n: n + 1 });
   return true;
 }
 
-/** Devolve a consulta quando a geração falhou por erro nosso. */
-export function devolverConsulta(ip: string) {
-  const atual = usos.get(ip);
-  if (atual && atual.dia === hoje() && atual.n > 0) usos.set(ip, { dia: atual.dia, n: atual.n - 1 });
+function devolverMemoria(ip: string) {
+  const atual = memoria.get(ip);
+  if (atual && atual.dia === hoje() && atual.n > 0) memoria.set(ip, { dia: atual.dia, n: atual.n - 1 });
+}
+
+export type Consumo = { devolver: () => Promise<void> };
+
+/** Tenta gastar uma consulta do IP. Retorna null se o limite do dia já foi atingido; senão, um recibo para devolvê-la. */
+export async function consumirConsulta(ip: string): Promise<Consumo | null> {
+  const db = banco();
+  if (db) {
+    try {
+      const chave = await db.consumir(ip, LIMITE_DIARIO);
+      if (!chave) return null;
+      return { devolver: () => db.devolver(chave).catch(() => {}) };
+    } catch (e) {
+      console.error("limite: banco indisponível, usando a memória do servidor", e);
+    }
+  }
+  if (!consumirMemoria(ip)) return null;
+  return { devolver: async () => devolverMemoria(ip) };
 }
 
 export const MENSAGEM_LIMITE =

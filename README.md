@@ -45,11 +45,13 @@ Variáveis de ambiente (no servidor; **nunca** commitar):
 |---|---|
 | `ANTHROPIC_API_KEY` | Obrigatória para a foto. Local: `.env.local`. Produção: variáveis do projeto na Vercel. Sem ela, o endpoint responde 503 e a busca por nome continua funcionando. |
 | `BULINHA_MODEL` | Opcional. Padrão `claude-opus-5-5`. |
-| `BULINHA_LIMITE_DIARIO` | Opcional. Consultas novas por IP por dia, somando foto, resumo e interações (padrão 5, em memória por instância). Resultados já em cache não contam; falha da IA devolve a consulta. |
+| `DATABASE_URL` | Postgres (Neon, via Marketplace da Vercel). Guarda o contador de consultas por IP e os resultados de IA já gerados; as tabelas `bulinha_limite` e `bulinha_cache` são criadas sozinhas na primeira execução. Sem ela, o app usa só a memória do servidor. |
+| `BULINHA_SEGREDO` | Opcional. Segredo misturado ao hash do IP (padrão: derivado de `DATABASE_URL`). |
+| `BULINHA_LIMITE_DIARIO` | Opcional. Consultas novas por IP por dia, somando foto, resumo e interações (padrão 5; contador compartilhado no banco). Resultados já em cache não contam; falha da IA devolve a consulta. |
 
 ## Resumo por princípio ativo
 
-`GET /api/resumo?principio=...` gera, com o Claude, um resumo geral da substância (para que serve, efeitos, contraindicações, cuidados, interações), sem doses. **Não é a bula do produto**; a tela deixa isso explícito e aponta o Bulário da ANVISA. Só aceita princípios ativos que existem no catálogo. O resultado é guardado na CDN da Vercel por 30 dias (`s-maxage`), então cada princípio ativo é gerado poucas vezes.
+`GET /api/resumo?principio=...` gera, com o Claude, um resumo geral da substância (para que serve, efeitos, contraindicações, cuidados, interações), sem doses. **Não é a bula do produto**; a tela deixa isso explícito e aponta o Bulário da ANVISA. Só aceita princípios ativos que existem no catálogo. O resultado é guardado no banco e na CDN da Vercel, então cada princípio ativo é gerado uma única vez (mude `VERSAO` em `src/lib/cache-ia.ts` ao melhorar o prompt, para regenerar).
 
 ## Meus remédios e leitura em voz alta
 
