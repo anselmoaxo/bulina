@@ -25,6 +25,16 @@ npm install
 npm run dev
 ```
 
+## Catálogo de medicamentos
+
+A busca usa `src/data/catalog.json`, gerado a partir dos dados abertos da ANVISA (só registros ativos). Para atualizar:
+
+```bash
+node scripts/build-catalog.mjs
+```
+
+Detalhes e limites da fonte em `docs/spike-anvisa.md` (o texto da bula ainda não tem fonte definida).
+
 ## Próximos passos
 
 1. Definir a fonte de dados da ANVISA (catálogo e texto das bulas).

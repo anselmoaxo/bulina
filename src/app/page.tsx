@@ -1,3 +1,5 @@
+import Busca from "./busca";
+
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-6 px-4 py-10">
@@ -8,9 +10,7 @@ export default function Home() {
         </p>
       </header>
 
-      <section className="rounded-lg border border-zinc-200 p-4 text-zinc-500">
-        Em breve: busca por nome e foto da caixa.
-      </section>
+      <Busca />
 
       <footer className="mt-auto space-y-2 text-sm text-zinc-600">
         <p>
