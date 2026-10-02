@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Medicamento } from "@/lib/catalog";
 
 type Resultado = {
@@ -22,7 +22,19 @@ async function reduzir(arquivo: File, ladoMax = 1280): Promise<Blob> {
   );
 }
 
+const CHAVE_CONSENTIMENTO = "bulina:consentimento-foto";
+
+function jaConsentiu(): boolean {
+  try {
+    return localStorage.getItem(CHAVE_CONSENTIMENTO) === "1";
+  } catch {
+    return false;
+  }
+}
+
 export default function Foto() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [pedindoConsentimento, setPedindoConsentimento] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
   const [resultado, setResultado] = useState<Resultado | null>(null);
@@ -48,20 +60,62 @@ export default function Foto() {
 
   return (
     <section className="space-y-3">
-      <label className="flex cursor-pointer items-center justify-center rounded-lg bg-teal-700 px-4 py-3 font-medium text-white hover:bg-teal-800">
+      <button
+        type="button"
+        disabled={carregando}
+        onClick={() => (jaConsentiu() ? inputRef.current?.click() : setPedindoConsentimento(true))}
+        className="flex w-full items-center justify-center rounded-lg bg-teal-700 px-4 py-3 font-medium text-white hover:bg-teal-800 disabled:opacity-60"
+      >
         {carregando ? "Lendo a foto..." : "Fotografar a caixa"}
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="sr-only"
-          disabled={carregando}
-          onChange={(e) => {
-            enviar(e.target.files?.[0]);
-            e.target.value = "";
-          }}
-        />
-      </label>
+      </button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="sr-only"
+        tabIndex={-1}
+        onChange={(e) => {
+          enviar(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
+
+      {pedindoConsentimento && (
+        <div role="dialog" aria-label="Uso da foto" className="space-y-3 rounded-lg border border-teal-200 bg-teal-50 p-4 text-sm text-zinc-800">
+          <p>
+            Para ler o nome do remédio, a foto é enviada para um serviço de inteligência artificial
+            (Anthropic). A Bulina não guarda a foto. Fotografe só a caixa, sem pessoas, documentos
+            ou receitas. Detalhes na{" "}
+            <Link href="/privacidade" className="underline">
+              política de privacidade
+            </Link>
+            .
+          </p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800"
+              onClick={() => {
+                try {
+                  localStorage.setItem(CHAVE_CONSENTIMENTO, "1");
+                } catch {}
+                setPedindoConsentimento(false);
+                inputRef.current?.click();
+              }}
+            >
+              Concordo e continuar
+            </button>
+            <button
+              type="button"
+              className="rounded-lg border border-zinc-300 px-4 py-2 hover:bg-white"
+              onClick={() => setPedindoConsentimento(false)}
+            >
+              Agora não
+            </button>
+          </div>
+        </div>
+      )}
       <p className="text-xs text-zinc-500">
         A foto é usada só para ler o nome e não é guardada.
       </p>

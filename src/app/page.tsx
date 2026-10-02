@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Busca from "./busca";
 import Foto from "./foto";
 
@@ -23,6 +24,11 @@ export default function Home() {
         <p>
           Em caso de emergência, ligue para o SAMU (192) ou procure um pronto
           atendimento.
+        </p>
+        <p>
+          <Link href="/privacidade" className="underline">
+            Política de privacidade
+          </Link>
         </p>
       </footer>
     </main>
