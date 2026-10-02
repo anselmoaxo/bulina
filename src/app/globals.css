@@ -1,21 +1,36 @@
 @import "tailwindcss";
 
-/* Tema claro fixo: as cores dos componentes foram feitas para fundo claro. */
-:root {
-  color-scheme: light;
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #10201c;
+  --color-muted: #4a5d57;
+  --color-paper: #fafbfa;
+  --color-folha: #0b6b5a;
+  --color-folha-escura: #084d41;
+  --color-bula: #e4efea;
+  --color-tarja: #f6c945;
+  --color-linha: #c5d5cd;
+  --font-sans: var(--font-atkinson), system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Tema claro fixo: as cores foram escolhidas para fundo claro e alto contraste. */
+:root {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-folha);
+  outline-offset: 3px;
+}
+
+/* O "x" nativo do campo de busca destoa das cores do app. */
+input[type="search"]::-webkit-search-cancel-button {
+  appearance: none;
 }
